@@ -3,6 +3,8 @@ package com.nelioAlves.workshopmongo.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.text.html.Option;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,17 @@ public class UserService {
 		repo.deleteById(id);
 	}
 	
+	public User update(User obj) {
+		Optional<User> newObj = repo.findById(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj.orElseThrow());
+	}
+	
+	private void updateData(Optional<User> newObj, User obj) {
+		newObj.orElseThrow().setName(obj.getName());
+		newObj.orElseThrow().setEmail(obj.getEmail());
+	}
+
 	public User fromDTO(UserDTO objDto) {
 		return new User(objDto.getId(), objDto.getName(), objDto.getEmail());
 	}
